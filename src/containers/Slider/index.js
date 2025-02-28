@@ -4,10 +4,14 @@ import { getMonth } from "../../helpers/Date";
 
 import "./style.scss";
 
+/**  || [] garantit focus comme un tableau meme si data est undefined
+ * [...] crée une copie du tableau data?.focus (ou un tableau vide si data?.focus est undefined).
+ */
+
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = [...(data?.focus || [])].sort((evtA, evtB) =>
+  const byDateDesc = [...(data?.focus || [])].sort((evtA, evtB) => /**  "?" =optimal chaining. Si data est undefined ou null, l'expression entière renvoie undefined sans générer d'erreur. */
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );  
 
@@ -23,7 +27,7 @@ const Slider = () => {
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <div key={event.id}>
+        <div key={event.id || idx}>
           <div
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
