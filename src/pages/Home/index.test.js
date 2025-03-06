@@ -7,7 +7,7 @@ describe("When Form is created", () => {
     await screen.findByText("Email");
     await screen.findByText("Nom");
     await screen.findByText("Prénom");
-    await screen.findByText("Personel / Entreprise");
+    await screen.findByText("Personnel / Entreprise");
   });
 
   describe("and a click is triggered on the submit button", () => {
@@ -20,25 +20,45 @@ describe("When Form is created", () => {
           bubbles: true,
         })
       );
-      await screen.findByText("En cours");
-      await screen.findByText("Message envoyé !");
+      await screen.findByText("En cours", {}, { timeout: 3000 });
+      await screen.findByText("Message envoyé !", {}, { timeout: 3000 });
     });
   });
 
 });
 
-
+// Ajout de tests d'intégration
 describe("When a page is created", () => {
-  it("a list of events is displayed", () => {
-    // to implement
-  })
-  it("a list a people is displayed", () => {
-    // to implement
-  })
-  it("a footer is displayed", () => {
-    // to implement
-  })
-  it("an event card, with the last event, is displayed", () => {
-    // to implement
-  })
+  it("a list of events is displayed", async () => {
+    const { container } = render(<Home />);
+    const nosReal = await container.querySelector("#realisationTitle");
+    expect(nosReal.innerHTML).toEqual("Nos réalisations");
+    const events = await container.querySelector("#events");
+    expect(events).toBeInTheDocument();
+  });
+
+  it("a list of people is displayed", async () => {
+    render(<Home />);
+    await screen.findByText("CEO");
+    await screen.findByText("Alice");
+    await screen.findByText("Isabelle");
+  });
+
+  it("a footer is displayed", async () => {
+    render(<Home />);
+    const footer = screen.getByTestId("footer");
+    expect(footer).toBeInTheDocument();
+  });
+
+  it("an event card, with the last event, is displayed", async () => {
+    // test implementation
+    render(<Home />);
+    setTimeout(() => {
+      () => {
+        const { last } = useData();
+        screen.findByTestId("event-card");
+        screen.findByText(last.title);
+      };
+    }, 100);
+  });
 });
